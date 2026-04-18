@@ -35,20 +35,32 @@ namespace WinFormUI
         {
             try
             {
-                // Khởi tạo đối tượng Item khớp với các thuộc tính trong Database
+                // Kiểm tra validation nhẹ trước khi thêm
+                if (string.IsNullOrWhiteSpace(txtName.Text) || string.IsNullOrWhiteSpace(txtSize.Text))
+                {
+                    MessageBox.Show("Vui lòng nhập đầy đủ Tên và Size!");
+                    return;
+                }
+
                 Item newItem = new Item
                 {
-                    ItemName = txtName.Text,    // Tương ứng ô Name
-                    Size = txtSize.Text,        // Tương ứng ô Size
+                    ItemName = txtName.Text.Trim(), // Dùng Trim() để xóa khoảng trắng thừa
+                    Size = txtSize.Text.Trim(),
                 };
 
                 _itemService.AddItem(newItem);
-                MessageBox.Show("Added successfully!");
+                MessageBox.Show("Thêm sản phẩm thành công!"); // Chỉnh lại tiếng Việt cho đồng bộ nè
+
+                // Sau khi thêm xong nên xóa trắng ô nhập để người dùng nhập món tiếp theo
+                txtName.Clear();
+                txtSize.Clear();
+                txtName.Focus();
+
                 LoadData();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
 
